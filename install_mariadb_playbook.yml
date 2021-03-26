@@ -1,0 +1,20 @@
+---
+- hosts: database
+  become: yes
+  
+  tasks:
+  
+  # MARIDB
+  - name: Add official MariaDB repository
+    apt_repository:
+      name: MariaDB
+      description: Official MariaDB repository
+      baseurl: "http://apt.mariadb.org/10.5/debian-amd64"
+      gpgkey: https://apt.mariadb.org/RPM-GPG-KEY-MariaDB
+      gpgcheck: true
+    tags: mariadb
+
+  - name: Install packages
+    package:
+      name: MariaDB-server
+      state: installed

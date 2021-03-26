@@ -1,0 +1,5 @@
+---
+  - import_playbook: nginx_playbook.yml
+  - import_playbook: nginx_wordpress_playbook.yml
+  - import_playbook: database_playbook.yml
+  - import_playbook: install_database_playbook.yml
