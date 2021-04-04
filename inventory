@@ -1,14 +1,14 @@
 #Web	server
 [nginx]	
-192.168.60.4	
+192.168.60.10	
 	
 #Application	server
 [wordpress]	
-192.168.60.5	
+192.168.60.20	
 	
 #Database	server	
 [database]	
-192.168.60.6
+192.168.60.30
 	
 #Group	'all'	with	all	servers	
 [all:children]	

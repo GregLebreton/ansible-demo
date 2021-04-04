@@ -1,0 +1,46 @@
+---
+- hosts: apach
+  become: yes
+    
+  tasks:
+
+# APACHE
+  - name: Install Nginx.
+    apt: name=nginx state=present
+
+  - name: check Nginx is up
+    service: name=nginx state=started enabled=yes
+ 
+ # WORDPRESS
+  - name: Download WordPress
+    get_url: url=https://wordpress.org/latest.tar.gz 
+      sha256sum="{{ wp_sha256sum }}
+      dest=/tmp/wordpress.tar.gz
+      validate_certs=no
+  
+  - name: Extract WordPress  
+    unarchive: src=/tmp/wordpress.tar.gz dest=/usr/share/nginx/html copy=no
+    sudo: yes
+  
+  - name: Copy sample config file
+    command: mv /usr/share/nginx/html/wordpress/wp-config-sample.php /usr/share/nginx/html/wordpress/wp-config.php creates=/usr/share/nginx/html/wordpress/wp-config.php
+    sudo: yes
+  
+  - name: Update WordPress config file
+    lineinfile:
+      dest=/usr/share/nginx/html/wordpress/wp-config.php
+      regexp="{{ item.regexp }}"
+      line="{{ item.line }}"
+    with_items:
+      - {'regexp': "define\\('DB_NAME', '(.)+'\\);", 'line': "define('DB_NAME', '{{wp_mysql_db}}');"}        
+      - {'regexp': "define\\('DB_USER', '(.)+'\\);", 'line': "define('DB_USER', '{{wp_mysql_user}}');"}        
+      - {'regexp': "define\\('DB_PASSWORD', '(.)+'\\);", 'line': "define('DB_PASSWORD', '{{wp_mysql_password}}');"}
+    sudo: yes
+  
+  - name: Move WordPress to root
+    raw : mv /usr/share/nginx/html/wordpress/* /usr/share/nginx/html
+    sudo: yes
+  
+  - name: Fix CGI PATH
+    raw : echo "cgi.fix_pathinfo=0" >> /etc/php7/cgi/php.ini
+    sudo: yes

@@ -21,7 +21,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "nginx" do |nginx|
     nginx.vm.hostname = "nginx.dev"
    # static ip address
-   nginx.vm.network :private_network, ip: "192.168.60.4"
+   nginx.vm.network :private_network, ip: "192.168.60.10"
   config.vm.provision "ansible" do |ansible|
     ansible.playbook= "nginx.yml"
     ansible.inventory_path="./inventory"
@@ -34,7 +34,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "wordpress" do |wordpress|
     wordpress.vm.hostname = "wordpress.dev"
     # static ip address
-    wordpress.vm.network :private_network, ip: "192.168.60.5"
+    wordpress.vm.network :private_network, ip: "192.168.60.20"
   config.vm.provision "ansible" do |ansible|
     ansible.playbook= "wordpress.yml"
     ansible.inventory_path="./inventory"
@@ -47,7 +47,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "database" do |database|
     database.vm.hostname = "database.dev"
     # static ip address
-    database.vm.network :private_network, ip: "192.168.60.6"
+    database.vm.network :private_network, ip: "192.168.60.30"
   config.vm.provision "ansible" do |ansible|
     ansible.playbook= "database.yml"
     ansible.inventory_path="./inventory"

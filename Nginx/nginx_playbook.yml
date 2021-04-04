@@ -1,0 +1,13 @@
+---
+- hosts: nginx
+  become: yes
+    
+  tasks:
+
+# nginx
+  - name: Install Apache.
+    apt: name=nginx state=present
+
+  - name: check Apache is up
+    service: name=nginx state=started enabled=yes
+ 
